@@ -16,8 +16,8 @@ find_package(Qt6 COMPONENTS
 add_executable(weatherApp src/main.cpp
         src/mainwindow.cpp
         src/mainwindow.h
-        src/DataHandler.cpp
-        src/DataHandler.h)
+        src/OpenMeteoAPI.cpp
+        src/OpenMeteoAPI.h)
 
 target_link_libraries(weatherApp
         Qt::Core
