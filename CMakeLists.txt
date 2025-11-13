@@ -15,13 +15,14 @@ find_package(Qt6 COMPONENTS
 
 add_executable(weatherApp src/main.cpp
         src/mainwindow.cpp
-        src/mainwindow.h)
+        src/mainwindow.h
+        src/DataHandler.cpp
+        src/DataHandler.h)
 
 target_link_libraries(weatherApp
         Qt::Core
         Qt::Gui
         Qt::Widgets)
 
-include_directories(include/httplib.h
-                    include/json.hpp)
+include_directories(include)
 
