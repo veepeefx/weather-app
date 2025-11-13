@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 4.0)
+project(weatherApp)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+
+find_package(Qt6 COMPONENTS
+        Core
+        Gui
+        Widgets
+        REQUIRED)
+
+add_executable(weatherApp src/main.cpp
+        src/mainwindow.cpp
+        src/mainwindow.h)
+
+target_link_libraries(weatherApp
+        Qt::Core
+        Qt::Gui
+        Qt::Widgets)
+
+include_directories(include/httplib.h
+                    include/json.hpp)
+
