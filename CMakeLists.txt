@@ -7,11 +7,12 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 
-find_package(Qt6 COMPONENTS
+find_package(Qt6 REQUIRED COMPONENTS
         Core
         Gui
         Widgets
-        REQUIRED)
+        Charts)
+
 
 add_executable(weatherApp src/main.cpp
         src/mainwindow.cpp
@@ -22,7 +23,8 @@ add_executable(weatherApp src/main.cpp
 target_link_libraries(weatherApp
         Qt::Core
         Qt::Gui
-        Qt::Widgets)
+        Qt::Widgets
+        Qt::Charts)
 
 include_directories(include)
 
