@@ -19,10 +19,8 @@ njson OpenMeteoAPI::apiRequest(const std::string& baseUrl, const std::string& se
     if (auto res = cli.Get(searchUrl)) {
         if (res->status == 200) {
             try {
-                njson jsonData = njson::parse(res->body);
-                // printing json for testing
-                std::cout << jsonData.dump(4) << std::endl;
-                return jsonData;
+                return njson::parse(res->body);
+
             } catch (njson::parse_error& e) {
                 std::cerr << "JSON parse error: " << e.what() << std::endl;
             } catch (std::exception& e) {
@@ -37,29 +35,39 @@ njson OpenMeteoAPI::apiRequest(const std::string& baseUrl, const std::string& se
     return {};
 }
 
-std::pair<float, float> OpenMeteoAPI::getCoordinates(const std::string& search)
+std::pair<std::pair<float, float>, std::string> OpenMeteoAPI::getCoordinates(const std::string& search)
 {
     std::string baseUrl = "http://geocoding-api.open-meteo.com";
     std::string searchUrl = "/v1/search?name=" + search + "&count=1&language=en&format=json";
 
     njson jsonData = apiRequest(baseUrl, searchUrl);
 
-    // if jsonData is non valid returns (0,0)
-    float lat = 0;
-    float lng = 0;
-    if (!jsonData.empty()) {
-        lat = jsonData["results"][0]["latitude"].get<float>();
-        lng = jsonData["results"][0]["longitude"].get<float>();
+    float lat;
+    float lng;
+    std::string name;
+    try {
+        lat = jsonData.at("results").at(0).at("latitude").get<float>();
+        lng = jsonData.at("results").at(0).at("longitude").get<float>();
+        name = jsonData.at("results").at(0).at("name").get<std::string>();
+    } catch (...) {
+        return ERROR_COORDS;
     }
-
     // for testing
-    std::cout << lat << " " << lng << std::endl;
-    return {lat, lng};
+    std::cout << lat << " " << lng << " " << name << std::endl;
+    return {{lat, lng}, name};
 }
 
-bool OpenMeteoAPI::getWeatherData(const std::string& search)
+njson OpenMeteoAPI::getWeatherData(const std::string& search)
 {
-    std::pair<float, float> coords = getCoordinates(search);
+    std::pair<std::pair<float, float>, std::string> res = getCoordinates(search);
+    std::pair<float, float> coords = res.first;
+    std::string name = res.second;
+
+    // if getCoorinates returned error values (search term was invalid) return empty json
+    if (coords == ERROR_COORDS.first) {
+        return {};
+    }
+
     float latitude = coords.first;
     float longitude = coords.second;
 
@@ -72,8 +80,10 @@ bool OpenMeteoAPI::getWeatherData(const std::string& search)
 
     njson jsonData = apiRequest(baseUrl, searchUrl);
 
-    // HANDLE DATA
+    // adding city name from geocoordinates to json with key "city"
+    jsonData["city"] = name;
 
-    // return type most likely changes
-    return true;
+    // print for testing
+    std::cout << jsonData.dump(2) << std::endl;
+    return jsonData;
 }

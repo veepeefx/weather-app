@@ -1,5 +1,6 @@
 #include <QApplication>
 
+#include "Controller.h"
 #include "mainwindow.h"
 
 int main(int argc, char *argv[]) {
@@ -9,6 +10,10 @@ int main(int argc, char *argv[]) {
     MainWindow w;
     w.setWindowFlags(Qt::Window);
     w.show();
+
+    OpenMeteoAPI api;
+
+    Controller controller(w, api);
 
     return QApplication::exec();
 }

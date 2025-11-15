@@ -12,6 +12,9 @@
 #include <QRandomGenerator>
 #include <QTime>
 #include <QValueAxis>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QPushButton>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
@@ -21,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     mainLayout_ = new QVBoxLayout(centralWidget);
 
+    initTopMenu();
     initCharts();
 
     this->resize(800,900);
@@ -33,6 +37,28 @@ MainWindow::~MainWindow()
     delete chart7d_;
 
     delete mainLayout_;
+}
+
+void MainWindow::initTopMenu()
+{
+    searchBox_ = new QComboBox();
+    searchBox_->setEditable(true);
+    searchBox_->setInsertPolicy(QComboBox::NoInsert);
+    searchBox_->setLineEdit(new QLineEdit);
+    searchBox_->lineEdit()->setPlaceholderText("Write here");
+
+    searchButton_ = new QPushButton("Search");
+
+    QHBoxLayout *searchLayout = new QHBoxLayout();
+    searchLayout->addWidget(searchBox_);
+    searchLayout->addWidget(searchButton_);
+
+    mainLayout_->addLayout(searchLayout);
+
+    cityLabel_ = new QLabel("[Search for results]");
+    cityLabel_->setStyleSheet("font-size: 24px; font-weight: bold;");
+
+    mainLayout_->addWidget(cityLabel_);
 }
 
 void MainWindow::initCharts()
@@ -169,6 +195,18 @@ void MainWindow::update7dChart()
     }
 
     rainSeries7d_->append(rainSet);
+}
+
+QComboBox *MainWindow::getSearchBox() { return searchBox_; }
+QPushButton *MainWindow::getSearchButton() { return searchButton_; }
+QLabel *MainWindow::getCityLabel() { return cityLabel_; }
+
+
+// sets focus to window itself
+void MainWindow::showEvent(QShowEvent *event)
+{
+    QMainWindow::showEvent(event);
+    this->setFocus();
 }
 
 // TESTING FUNCTIONS
