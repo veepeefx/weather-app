@@ -23,6 +23,9 @@ public:
     QPushButton* getSearchButton();
     QLabel* getCityLabel();
 
+    void update24hChart(const std::vector<float> &hourlyTemp, const std::vector<float> &dailyRain);
+    void update7dChart(const std::vector<float> &hourlyTemp, const std::vector<float> &dailyRain);
+
 private:
     // layouts
     QVBoxLayout *mainLayout_;
@@ -48,9 +51,6 @@ private:
 
     void init24hChart();
     void init7dChart();
-
-    void update24hChart();
-    void update7dChart();
 
     void showEvent(QShowEvent *event) override;
 

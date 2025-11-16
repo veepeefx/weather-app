@@ -66,9 +66,6 @@ void MainWindow::initCharts()
     init24hChart();
     init7dChart();
 
-    update24hChart();
-    update7dChart();
-
     // by default 24h chart is displayed
     chartView_->setChart(chart24h_);
     chartView_->setRenderHint(QPainter::Antialiasing);
@@ -130,8 +127,10 @@ void MainWindow::init7dChart()
     QDateTimeAxis *tempXAxis = new QDateTimeAxis();
     tempXAxis->setFormat("ddd dd.MM");
 
+    // time starts from the beginning of the day
     QDateTime now = QDateTime::currentDateTime();
-    tempXAxis->setRange(now, now.addDays(7));
+    now.setTime(QTime(0,0,0));
+    tempXAxis->setRange(now, now.addDays(7).addSecs(-1));
     tempXAxis->setTickCount(8);
 
     QValueAxis *tempYAxis = new QValueAxis();
@@ -148,12 +147,8 @@ void MainWindow::init7dChart()
     chart7d_->setAxisX(tempXAxis, tempSeries7d_);
 }
 
-void MainWindow::update24hChart()
+void MainWindow::update24hChart(const std::vector<float> &hourlyTemp, const std::vector<float> &hourlyRain)
 {
-    // these functions are only for testing and return dummy data
-    QVector<float> temp = getTemperature();
-    QVector<float> rain = getRain();
-
     tempSeries24h_->clear();
     rainSeries24h_->clear();
 
@@ -167,30 +162,26 @@ void MainWindow::update24hChart()
         QDateTime dt = startHour.addSecs(i * 3600);
         // QVector temp and rain starts from 0:00 so we need to leave out hours before current time
         // hour and then + i to go forward as loop goes through
-        tempSeries24h_->append(dt.toMSecsSinceEpoch(), temp[hour + i]);
-        *rainSet << rain[hour + i];
+        tempSeries24h_->append(dt.toMSecsSinceEpoch(), hourlyTemp[hour + i]);
+        *rainSet << hourlyRain[hour + i];
     }
 
     rainSeries24h_->append(rainSet);
 }
 
-void MainWindow::update7dChart()
+void MainWindow::update7dChart(const std::vector<float> &hourlyTemp, const std::vector<float> &dailyRain)
 {
-    QVector<float> temp = getTemperature();
-    QVector<float> rain = getRain();
-
     tempSeries7d_->clear();
     rainSeries7d_->clear();
 
     QBarSet *rainSet = new QBarSet("Rain");
     QDateTime now = QDateTime::currentDateTime();
-    QDateTime startHour(QDate(now.date()), QTime(now.time().hour(), 0, 0, 0));
 
-    for (int i = 0; i <= 7; ++i) {
-        *rainSet << rain[i];
+    for (int i = 0; i < 7; ++i) {
+        *rainSet << dailyRain[i];
         for (int j = 0; j < 24; ++j) {
             QDateTime dt(QDate(now.date()).addDays(i), QTime(j, 0, 0));
-            tempSeries7d_->append(dt.toMSecsSinceEpoch(), temp[i * 24 + j]);
+            tempSeries7d_->append(dt.toMSecsSinceEpoch(), hourlyTemp[i * 24 + j]);
         }
     }
 
@@ -207,30 +198,4 @@ void MainWindow::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);
     this->setFocus();
-}
-
-// TESTING FUNCTIONS
-QVector<float> MainWindow::getTemperature()
-{
-    QVector<float> data;
-    data.reserve(50);
-
-    for (int i = 0; i < 200; ++i) {
-        float value = QRandomGenerator::global()->bounded(20, 30);
-        data.append(value);
-    }
-
-    return data;
-}
-QVector<float> MainWindow::getRain()
-{
-    QVector<float> data;
-    data.reserve(200);
-
-    for (int i = 0; i < 200; ++i) {
-        float value = QRandomGenerator::global()->bounded(0, 30);
-        data.append(value);
-    }
-
-    return data;
 }
