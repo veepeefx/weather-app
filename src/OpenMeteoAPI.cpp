@@ -65,7 +65,7 @@ njson OpenMeteoAPI::getWeatherData(const std::string& search)
 
     // if getCoorinates returned error values (search term was invalid) return empty json
     if (coords == ERROR_COORDS.first) {
-        return {};
+        return njson::object();;
     }
 
     float latitude = coords.first;
@@ -74,7 +74,7 @@ njson OpenMeteoAPI::getWeatherData(const std::string& search)
     std::string baseUrl = "http://api.open-meteo.com";
     std::string searchUrl = "/v1/forecast?latitude=" + std::format("{:.6f}", latitude)
                         + "&longitude=" + std::format("{:.6f}", longitude)
-                        + "&daily=temperature_2m_max,temperature_2m_min"
+                        + "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum"
                         + "&hourly=temperature_2m,precipitation_probability,precipitation"
                         + "&timezone=" + TIME_ZONE + "&wind_speed_unit=ms";
 
