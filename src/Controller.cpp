@@ -8,6 +8,8 @@
 #include <QLineEdit>
 #include <QPushButton>
 
+#include "WeatherData.h"
+
 
 Controller::Controller(MainWindow &window, OpenMeteoAPI &api) : openMeteo_(api), mainWindow_(window)
 {
@@ -42,11 +44,7 @@ void Controller::makeSearch()
 
 void Controller::saveData()
 {
-    tempHourly_.clear();
-    rainHourly_.clear();
-    maxTempDaily_.clear();
-    minTempDaily_.clear();
-    rainDaily_.clear();
+    WeatherData::clearData();
 
     njson hourly = data_.at("hourly");
     njson daily = data_.at("daily");
@@ -55,8 +53,8 @@ void Controller::saveData()
     njson rain = hourly.at("precipitation");
 
     for (int i = 0; i < temp.size(); i++) {
-        tempHourly_.push_back(temp.at(i));
-        rainHourly_.push_back(rain.at(i));
+        WeatherData::tempHourly.push_back(temp.at(i));
+        WeatherData::rainHourly.push_back(rain.at(i));
     }
 
     njson tempMax = daily.at("temperature_2m_max");
@@ -64,9 +62,9 @@ void Controller::saveData()
     rain = daily.at("precipitation_sum");
 
     for (int i = 0; i < tempMax.size(); i++) {
-        maxTempDaily_.push_back(tempMax.at(i));
-        minTempDaily_.push_back(tempMin.at(i));
-        rainDaily_.push_back(rain.at(i));
+        WeatherData::maxTempDaily.push_back(tempMax.at(i));
+        WeatherData::minTempDaily.push_back(tempMin.at(i));
+        WeatherData::rainDaily.push_back(rain.at(i));
     }
 }
 
@@ -79,6 +77,6 @@ void Controller::updateUI()
 
     // updating view
     mainWindow_.getCityLabel()->setText(resCity);
-    mainWindow_.update24hChart(tempHourly_, rainHourly_);
-    mainWindow_.update7dChart(tempHourly_, rainDaily_);
+    mainWindow_.update24hChart();
+    mainWindow_.update7dChart();
 }

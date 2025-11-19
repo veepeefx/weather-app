@@ -19,12 +19,12 @@ public:
     ~MainWindow() override;
 
     // getters
-    QComboBox* getSearchBox();
-    QPushButton* getSearchButton();
-    QLabel* getCityLabel();
+    [[nodiscard]] QComboBox* getSearchBox() const;
+    [[nodiscard]] QPushButton* getSearchButton() const;
+    [[nodiscard]] QLabel* getCityLabel() const;
 
-    void update24hChart(const std::vector<float> &hourlyTemp, const std::vector<float> &dailyRain);
-    void update7dChart(const std::vector<float> &hourlyTemp, const std::vector<float> &dailyRain);
+    void update24hChart();
+    void update7dChart();
 
 private:
     // layouts
@@ -36,13 +36,13 @@ private:
     QLabel *cityLabel_;
 
     // chart items
-    QChart *chart24h_ = new QChart();
-    QLineSeries *tempSeries24h_ = new QLineSeries();
-    QBarSeries *rainSeries24h_ = new QBarSeries();
+    QChart *chart24h_;
+    QLineSeries *tempSeries24h_;
+    QBarSeries *rainSeries24h_;
 
-    QChart *chart7d_ = new QChart();
-    QLineSeries *tempSeries7d_ = new QLineSeries();
-    QBarSeries *rainSeries7d_ = new QBarSeries();
+    QChart *chart7d_;
+    QLineSeries *tempSeries7d_;
+    QBarSeries *rainSeries7d_;
 
     QChartView *chartView_ = new QChartView();
 
@@ -53,10 +53,6 @@ private:
     void init7dChart();
 
     void showEvent(QShowEvent *event) override;
-
-    // for testing fake data
-    QVector<float> getTemperature();
-    QVector<float> getRain();
 
 private
     slots:

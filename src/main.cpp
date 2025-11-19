@@ -2,6 +2,7 @@
 
 #include "Controller.h"
 #include "mainwindow.h"
+#include "WeatherData.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
@@ -13,6 +14,7 @@ int main(int argc, char *argv[]) {
 
     OpenMeteoAPI api;
 
+    WeatherData::initVectorReserve();
     Controller controller(w, api);
 
     return QApplication::exec();
