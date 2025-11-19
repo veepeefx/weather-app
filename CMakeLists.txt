@@ -20,7 +20,8 @@ add_executable(weatherApp src/main.cpp
         src/OpenMeteoAPI.cpp
         src/OpenMeteoAPI.h
         src/Controller.cpp
-        src/Controller.h)
+        src/Controller.h
+        src/WeatherData.h)
 
 target_link_libraries(weatherApp
         Qt::Core
