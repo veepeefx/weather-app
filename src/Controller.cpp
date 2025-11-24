@@ -1,7 +1,5 @@
 #include "Controller.h"
 
-#include <iostream>
-
 #include "mainwindow.h"
 
 #include <QObject>
@@ -18,6 +16,8 @@ Controller::Controller(MainWindow &window, OpenMeteoAPI &api) : openMeteo_(api),
             this, &Controller::makeSearch);
     connect(mainWindow_.getSearchButton(), &QPushButton::clicked,
             this, &Controller::makeSearch);
+    connect(mainWindow_.getChangePeriodButton(), &QPushButton::clicked,
+            this, [this] () { mainWindow_.changePeriod(); });
 }
 
 Controller::~Controller() {}
@@ -77,6 +77,5 @@ void Controller::updateUI()
 
     // updating view
     mainWindow_.getCityLabel()->setText(resCity);
-    mainWindow_.update24hChart();
-    mainWindow_.update7dChart();
+    mainWindow_.updateCharts();
 }

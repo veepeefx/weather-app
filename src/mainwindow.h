@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QValueAxis>
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -21,10 +22,11 @@ public:
     // getters
     [[nodiscard]] QComboBox* getSearchBox() const;
     [[nodiscard]] QPushButton* getSearchButton() const;
+    [[nodiscard]] QPushButton* getChangePeriodButton() const;
     [[nodiscard]] QLabel* getCityLabel() const;
 
-    void update24hChart();
-    void update7dChart();
+    void updateCharts();
+    void changePeriod();
 
 private:
     // layouts
@@ -33,7 +35,14 @@ private:
     // widgets
     QComboBox *searchBox_;
     QPushButton *searchButton_;
+    QPushButton *changePeriodButton_;
     QLabel *cityLabel_;
+
+    QValueAxis *tempYAxis24h_;
+    QValueAxis *rainYAxis24h_;
+
+    QValueAxis *tempYAxis7d_;
+    QValueAxis *rainYAxis7d_;
 
     // chart items
     QChart *chart24h_;
@@ -44,13 +53,18 @@ private:
     QLineSeries *tempSeries7d_;
     QBarSeries *rainSeries7d_;
 
-    QChartView *chartView_ = new QChartView();
+    QChartView *chartView_;
 
     void initTopMenu();
     void initCharts();
 
     void init24hChart();
     void init7dChart();
+
+    void update24hChart();
+    void update7dChart();
+
+    void setYAxisRange();
 
     void showEvent(QShowEvent *event) override;
 

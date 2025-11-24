@@ -50,10 +50,12 @@ void MainWindow::initTopMenu()
     searchBox_->lineEdit()->setPlaceholderText("Write here");
 
     searchButton_ = new QPushButton("Search");
+    changePeriodButton_ = new QPushButton("24 h / 7 d");
 
     QHBoxLayout *searchLayout = new QHBoxLayout();
     searchLayout->addWidget(searchBox_);
     searchLayout->addWidget(searchButton_);
+    searchLayout->addWidget(changePeriodButton_);
 
     mainLayout_->addLayout(searchLayout);
 
@@ -69,6 +71,7 @@ void MainWindow::initCharts()
     init7dChart();
 
     // by default 24h chart is displayed
+    chartView_ = new QChartView();
     chartView_->setChart(chart24h_);
     chartView_->setRenderHint(QPainter::Antialiasing);
 
@@ -98,21 +101,27 @@ void MainWindow::init24hChart()
     tempXAxis->setRange(startHour, startHour.addSecs(24 * 3600));
     tempXAxis->setTickCount(7);
 
-    QValueAxis *tempYAxis = new QValueAxis();
-    tempYAxis->setRange(-40,40);
-    QValueAxis *rainYAxis = new QValueAxis();
-    rainYAxis->setRange(0,40);
-
     tempSeries24h_ = new QLineSeries();
     rainSeries24h_ = new QBarSeries();
+
+    // base values
+    tempYAxis24h_ = new QValueAxis();
+    tempYAxis24h_->setRange(-20, 20);
+    rainYAxis24h_ = new QValueAxis();
+    rainYAxis24h_->setRange(0, 20);
 
     chart24h_->addSeries(rainSeries24h_);
     chart24h_->addSeries(tempSeries24h_);
 
-    chart24h_->setAxisY(rainYAxis, rainSeries24h_);
-    chart24h_->setAxisY(tempYAxis, tempSeries24h_);
-    chart24h_->setAxisX(rainXAxis, rainSeries24h_);
-    chart24h_->setAxisX(tempXAxis, tempSeries24h_);
+    chart24h_->addAxis(tempYAxis24h_, Qt::AlignLeft);
+    tempSeries24h_->attachAxis(tempYAxis24h_);
+    chart24h_->addAxis(rainYAxis24h_, Qt::AlignRight);
+    rainSeries24h_->attachAxis(rainYAxis24h_);
+
+    chart24h_->addAxis(tempXAxis, Qt::AlignBottom);
+    tempSeries24h_->attachAxis(tempXAxis);
+    chart24h_->addAxis(rainXAxis, Qt::AlignBottom);
+    rainSeries24h_->attachAxis(rainXAxis);
 }
 
 void MainWindow::init7dChart()
@@ -138,21 +147,34 @@ void MainWindow::init7dChart()
     tempXAxis->setRange(now, now.addDays(7).addSecs(-1));
     tempXAxis->setTickCount(8);
 
-    QValueAxis *tempYAxis = new QValueAxis();
-    tempYAxis->setRange(-40,40);
-    QValueAxis *rainYAxis = new QValueAxis();
-    rainYAxis->setRange(0,40);
-
     tempSeries7d_ = new QLineSeries();
     rainSeries7d_ = new QBarSeries();
+
+    // base values
+    tempYAxis7d_ = new QValueAxis();
+    tempYAxis7d_->setRange(-20, 20);
+    rainYAxis7d_ = new QValueAxis();
+    rainYAxis7d_->setRange(0, 20);
 
     chart7d_->addSeries(rainSeries7d_);
     chart7d_->addSeries(tempSeries7d_);
 
-    chart7d_->setAxisY(rainYAxis, rainSeries7d_);
-    chart7d_->setAxisY(tempYAxis, tempSeries7d_);
-    chart7d_->setAxisX(rainXAxis, rainSeries7d_);
-    chart7d_->setAxisX(tempXAxis, tempSeries7d_);
+    chart7d_->addAxis(tempYAxis7d_, Qt::AlignLeft);
+    tempSeries7d_->attachAxis(tempYAxis7d_);
+    chart7d_->addAxis(rainYAxis7d_, Qt::AlignRight);
+    rainSeries7d_->attachAxis(rainYAxis7d_);
+
+    chart7d_->addAxis(tempXAxis, Qt::AlignBottom);
+    tempSeries7d_->attachAxis(tempXAxis);
+    chart7d_->addAxis(rainXAxis, Qt::AlignBottom);
+    rainSeries7d_->attachAxis(rainXAxis);
+}
+
+void MainWindow::updateCharts()
+{
+    update24hChart();
+    update7dChart();
+    setYAxisRange();
 }
 
 void MainWindow::update24hChart()
@@ -173,7 +195,6 @@ void MainWindow::update24hChart()
         tempSeries24h_->append(dt.toMSecsSinceEpoch(), WeatherData::tempHourly[hour + i]);
         *rainSet << WeatherData::rainHourly[hour + i];
     }
-
     rainSeries24h_->append(rainSet);
 }
 
@@ -196,8 +217,68 @@ void MainWindow::update7dChart()
     rainSeries7d_->append(rainSet);
 }
 
+// ranges y-axis so it is easy to read
+void MainWindow::setYAxisRange()
+{
+    int hour = QDateTime::currentDateTime().time().hour();
+
+    // 24h
+    // temp axis
+    auto tempRange = std::minmax_element(
+    WeatherData::tempHourly.begin() + hour,
+    WeatherData::tempHourly.begin() + hour + 25
+    );
+
+    tempYAxis24h_->setRange(*tempRange.first - 5, *tempRange.second + 5);
+    tempYAxis24h_->applyNiceNumbers();
+    tempYAxis24h_->setTickCount(5);
+
+    // rain axis
+    auto maxRain = std::max_element(
+        WeatherData::rainHourly.begin() + hour,
+        WeatherData::rainHourly.begin() + hour + 25);
+
+    float upLimit = 4;
+    if (*maxRain >= 3) {
+        upLimit = *maxRain + 1;
+    }
+    rainYAxis24h_->setRange(0, upLimit);
+    rainYAxis24h_->applyNiceNumbers();
+    rainYAxis24h_->setTickCount(5);
+
+    // 7d
+    // temp axis
+    auto maxWeeklyTemp = std::ranges::max_element(WeatherData::maxTempDaily);
+    auto minWeeklyTemp = std::ranges::min_element(WeatherData::minTempDaily);
+    tempYAxis7d_->setRange(*minWeeklyTemp - 5, *maxWeeklyTemp + 5);
+    tempYAxis7d_->applyNiceNumbers();
+    tempYAxis7d_->setTickCount(5);
+
+    // rain axis
+    auto maxDaily = std::ranges::max_element(WeatherData::rainDaily);
+
+    upLimit = 4;
+    if (*maxDaily >= 3) {
+        upLimit = *maxDaily + 1;
+    }
+
+    rainYAxis7d_->setRange(0, upLimit);
+    rainYAxis7d_->applyNiceNumbers();
+    rainYAxis7d_->setTickCount(5);
+}
+
+void MainWindow::changePeriod()
+{
+    if (chartView_->chart() == chart24h_) {
+        chartView_->setChart(chart7d_);
+    } else {
+        chartView_->setChart(chart24h_);
+    }
+}
+
 QComboBox *MainWindow::getSearchBox() const { return searchBox_; }
 QPushButton *MainWindow::getSearchButton() const { return searchButton_; }
+QPushButton *MainWindow::getChangePeriodButton() const { return changePeriodButton_; }
 QLabel *MainWindow::getCityLabel() const { return cityLabel_; }
 
 
