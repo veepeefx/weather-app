@@ -52,8 +52,6 @@ std::pair<std::pair<float, float>, std::string> OpenMeteoAPI::getCoordinates(con
     } catch (...) {
         return ERROR_COORDS;
     }
-    // for testing
-    std::cout << lat << " " << lng << " " << name << std::endl;
     return {{lat, lng}, name};
 }
 
@@ -74,16 +72,17 @@ njson OpenMeteoAPI::getWeatherData(const std::string& search)
     std::string baseUrl = "http://api.open-meteo.com";
     std::string searchUrl = "/v1/forecast?latitude=" + std::format("{:.6f}", latitude)
                         + "&longitude=" + std::format("{:.6f}", longitude)
-                        + "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum"
+                        + "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max"
                         + "&hourly=temperature_2m,precipitation_probability,precipitation"
+                        + "&current=temperature_2m,precipitation"
                         + "&timezone=" + TIME_ZONE + "&wind_speed_unit=ms";
+    // example search for easier access:
+    // https://api.open-meteo.com/v1/forecast?latitude=51&longitude=51&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&hourly=temperature_2m,precipitation_probability,precipitation&current=temperature_2m,precipitation&timezone=Europe/Helsinki&wind_speed_unit=ms
 
     njson jsonData = apiRequest(baseUrl, searchUrl);
 
     // adding city name from geocoordinates to json with key "city"
     jsonData["city"] = name;
 
-    // print for testing
-    std::cout << jsonData.dump(2) << std::endl;
     return jsonData;
 }
