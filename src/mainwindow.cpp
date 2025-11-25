@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "WeatherData.h"
 
 #include <iostream>
 #include <QVBoxLayout>
@@ -15,8 +16,9 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QPushButton>
-
-#include "WeatherData.h"
+#include <QTableWidget>
+#include <QHeaderView>
+#include <QStandardItemModel>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
@@ -28,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     initTopMenu();
     initCharts();
+    initTables();
 
     this->resize(800,900);
 }
@@ -88,6 +91,18 @@ void MainWindow::initCharts()
     chartView_->setRenderHint(QPainter::Antialiasing);
 
     mainLayout_->addWidget(chartView_);
+}
+
+void MainWindow::initTables()
+{
+    tableview_ = new QTableView();
+    tableview_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    init24hTable();
+    init7dTable();
+
+    tableview_->setModel(model24h_);
+    mainLayout_->addWidget(tableview_);
 }
 
 void MainWindow::init24hChart()
@@ -283,9 +298,49 @@ void MainWindow::changePeriod()
 {
     if (chartView_->chart() == chart24h_) {
         chartView_->setChart(chart7d_);
+        tableview_->setModel(model7d_);
     } else {
         chartView_->setChart(chart24h_);
+        tableview_->setModel(model24h_);
     }
+}
+
+void MainWindow::init24hTable()
+{
+    model24h_ = new QStandardItemModel(24, 3);
+    model24h_->setHorizontalHeaderLabels({"°C", "mm", "💧 %"});
+    QStringList list;
+    int hour = QDateTime::currentDateTime().time().hour();
+
+    for (int i = 0; i < 24; ++i) {
+        list.push_back(QString::number((hour + i) % 24) + ":00");
+    }
+    model24h_->setVerticalHeaderLabels(list);
+}
+
+void MainWindow::init7dTable()
+{
+    model7d_ = new QStandardItemModel(7, 4);
+    model7d_->setHorizontalHeaderLabels({"max °C", "min °C", "mm", "💧 %"});
+    QStringList list;
+    QDateTime now = QDateTime::currentDateTime();
+    QLocale en(QLocale::English);
+
+    for (int i = 0; i < 7; ++i) {
+        list.push_back(en.dayName(now.date().dayOfWeek(), QLocale::ShortFormat));
+        now = now.addDays(1);
+    }
+    model7d_->setVerticalHeaderLabels(list);
+}
+
+void MainWindow::update24hTable()
+{
+
+}
+
+void MainWindow::update7dTable()
+{
+
 }
 
 QComboBox *MainWindow::getSearchBox() const { return searchBox_; }
