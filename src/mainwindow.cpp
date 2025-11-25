@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     this->setCentralWidget(centralWidget);
 
     mainLayout_ = new QVBoxLayout(centralWidget);
+    QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates));
 
     initTopMenu();
     initCharts();
@@ -40,6 +41,9 @@ MainWindow::~MainWindow()
     // only one of them is allocated with parent (chartView_)
     delete chart24h_;
     delete chart7d_;
+
+    delete model24h_;
+    delete model7d_;
 
     delete mainLayout_;
 }
@@ -114,6 +118,7 @@ void MainWindow::init24hChart()
     QBarCategoryAxis *rainXAxis = new QBarCategoryAxis();
 
     QStringList categories;
+    categories.reserve(24);
     for (int i = 0; i < 24; ++i) {
         categories << QString::number(i);
     }
@@ -123,9 +128,10 @@ void MainWindow::init24hChart()
     QDateTimeAxis *tempXAxis = new QDateTimeAxis();
     tempXAxis->setFormat("hh:mm");
 
-    QDateTime now = QDateTime::currentDateTime();
-    QDateTime startHour = QDateTime(QDate(now.date()), QTime(now.time().hour(), 0));
-    tempXAxis->setRange(startHour, startHour.addSecs(24 * 3600));
+    QDateTime start = QDateTime(QDate::currentDate(), QTime(QTime::currentTime().hour(), 0));
+    QDateTime end = start.addSecs(24 * 3600);
+
+    tempXAxis->setRange(start, end);
     tempXAxis->setTickCount(7);
 
     tempSeries24h_ = new QLineSeries();
@@ -156,22 +162,17 @@ void MainWindow::init7dChart()
     chart7d_ = new QChart();
 
     QBarCategoryAxis *rainXAxis = new QBarCategoryAxis();
-
-    QStringList categories;
-    for (int i = 0; i < 7; ++i) {
-        categories << QString::number(i);
-    }
-
     rainXAxis->setVisible(false);
-    rainXAxis->setCategories(categories);
+    rainXAxis->setCategories({"0", "1", "2", "3", "4", "5", "6", "7"});
 
     QDateTimeAxis *tempXAxis = new QDateTimeAxis();
     tempXAxis->setFormat("ddd dd.MM");
 
     // time starts from the beginning of the day
-    QDateTime now = QDateTime::currentDateTime();
-    now.setTime(QTime(0,0,0));
-    tempXAxis->setRange(now, now.addDays(7).addSecs(-1));
+    QDateTime start = QDateTime(QDate::currentDate(), QTime(0,0,0));
+    QDateTime end = start.addDays(7);
+
+    tempXAxis->setRange(start, end);
     tempXAxis->setTickCount(8);
 
     tempSeries7d_ = new QLineSeries();
@@ -310,6 +311,7 @@ void MainWindow::init24hTable()
     model24h_ = new QStandardItemModel(24, 3);
     model24h_->setHorizontalHeaderLabels({"°C", "mm", "💧 %"});
     QStringList list;
+    list.reserve(24);
     int hour = QDateTime::currentDateTime().time().hour();
 
     for (int i = 0; i < 24; ++i) {
@@ -323,12 +325,11 @@ void MainWindow::init7dTable()
     model7d_ = new QStandardItemModel(7, 4);
     model7d_->setHorizontalHeaderLabels({"max °C", "min °C", "mm", "💧 %"});
     QStringList list;
-    QDateTime now = QDateTime::currentDateTime();
-    QLocale en(QLocale::English);
+    list.reserve(7);
+    QDate current = QDate::currentDate();
 
     for (int i = 0; i < 7; ++i) {
-        list.push_back(en.dayName(now.date().dayOfWeek(), QLocale::ShortFormat));
-        now = now.addDays(1);
+        list.push_back(QLocale().dayName(current.addDays(i).dayOfWeek(), QLocale::ShortFormat));
     }
     model7d_->setVerticalHeaderLabels(list);
 }
