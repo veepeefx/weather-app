@@ -24,6 +24,8 @@ public:
     [[nodiscard]] QPushButton* getSearchButton() const;
     [[nodiscard]] QPushButton* getChangePeriodButton() const;
     [[nodiscard]] QLabel* getCityLabel() const;
+    [[nodiscard]] QLabel* getCurrentTempLabel() const;
+    [[nodiscard]] QLabel* getCurrentRainLabel() const;
 
     void updateCharts();
     void changePeriod();
@@ -37,6 +39,8 @@ private:
     QPushButton *searchButton_;
     QPushButton *changePeriodButton_;
     QLabel *cityLabel_;
+    QLabel *currentTempLabel_;
+    QLabel *currentRainLabel_;
 
     QValueAxis *tempYAxis24h_;
     QValueAxis *rainYAxis24h_;

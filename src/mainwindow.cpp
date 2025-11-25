@@ -62,7 +62,19 @@ void MainWindow::initTopMenu()
     cityLabel_ = new QLabel("[Search for results]");
     cityLabel_->setStyleSheet("font-size: 24px; font-weight: bold;");
 
+    currentTempLabel_ = new QLabel("");
+    currentTempLabel_->setStyleSheet("font-size: 24px;");
+    currentRainLabel_ = new QLabel("");
+    currentRainLabel_->setStyleSheet("font-size: 24px;");
+
+    QHBoxLayout *infoLayout = new QHBoxLayout();
+    infoLayout->addWidget(currentTempLabel_);
+    infoLayout->addWidget(currentRainLabel_);
+    infoLayout->setAlignment(Qt::AlignLeft);
+    infoLayout->setSpacing(10);
+
     mainLayout_->addWidget(cityLabel_);
+    mainLayout_->addLayout(infoLayout);
 }
 
 void MainWindow::initCharts()
@@ -280,6 +292,8 @@ QComboBox *MainWindow::getSearchBox() const { return searchBox_; }
 QPushButton *MainWindow::getSearchButton() const { return searchButton_; }
 QPushButton *MainWindow::getChangePeriodButton() const { return changePeriodButton_; }
 QLabel *MainWindow::getCityLabel() const { return cityLabel_; }
+QLabel *MainWindow::getCurrentTempLabel() const { return currentTempLabel_; }
+QLabel *MainWindow::getCurrentRainLabel() const { return currentRainLabel_; }
 
 
 // sets focus to window itself

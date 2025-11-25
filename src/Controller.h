@@ -14,9 +14,7 @@ private:
     MainWindow &mainWindow_;
     OpenMeteoAPI &openMeteo_;
 
-    njson data_;
-
-    void saveData();
+    void saveData(const njson &data);
     void updateUI();
 
 private slots:
