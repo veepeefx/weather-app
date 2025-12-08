@@ -1,7 +1,7 @@
 #include <QApplication>
 
 #include "Controller.h"
-#include "mainwindow.h"
+#include "View/mainwindow.h"
 #include "WeatherData.h"
 
 int main(int argc, char *argv[]) {

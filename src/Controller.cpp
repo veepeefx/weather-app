@@ -1,6 +1,6 @@
 #include "Controller.h"
 
-#include "mainwindow.h"
+#include "View/mainwindow.h"
 
 #include <QObject>
 #include <QLineEdit>

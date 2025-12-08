@@ -1,6 +1,6 @@
 #ifndef WEATHERAPP_CONTROLLER_H
 #define WEATHERAPP_CONTROLLER_H
-#include "mainwindow.h"
+#include "View/mainwindow.h"
 #include "OpenMeteoAPI.h"
 
 class Controller : public QObject {
