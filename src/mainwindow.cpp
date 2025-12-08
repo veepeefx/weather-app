@@ -198,13 +198,6 @@ void MainWindow::init7dChart()
     rainSeries7d_->attachAxis(rainXAxis);
 }
 
-void MainWindow::updateCharts()
-{
-    update24hChart();
-    update7dChart();
-    setYAxisRange();
-}
-
 void MainWindow::update24hChart()
 {
     tempSeries24h_->clear();
@@ -336,12 +329,42 @@ void MainWindow::init7dTable()
 
 void MainWindow::update24hTable()
 {
+    int hour = QTime::currentTime().hour();
 
+    for (int i = 0; i < 24; i++) {
+        model24h_->setItem(i, 0, new QStandardItem(
+            QString::number(WeatherData::tempHourly[i + hour], 'f', 1)));
+        model24h_->setItem(i, 1, new QStandardItem(
+            QString::number(WeatherData::rainHourly[i + hour], 'f', 1)));
+        model24h_->setItem(i, 2, new QStandardItem(
+            QString::number(WeatherData::rainProbabilityHourly[i + hour], 'f', 1)));
+    }
 }
 
 void MainWindow::update7dTable()
 {
+    for (int i = 0; i < 7; i++) {
+        model7d_->setItem(i, 0, new QStandardItem(
+            QString::number(WeatherData::maxTempDaily[i], 'f', 1)));
+        model7d_->setItem(i, 1, new QStandardItem(
+            QString::number(WeatherData::minTempDaily[i], 'f', 1)));
+        model7d_->setItem(i, 2, new QStandardItem(
+            QString::number(WeatherData::rainDaily[i], 'f', 1)));
+        model7d_->setItem(i, 3, new QStandardItem(
+            QString::number(WeatherData::rainProbabilityDailyMax[i], 'f', 1)));
+    }
+}
 
+void MainWindow::updateMainWindow()
+{
+    // updating charts
+    update24hChart();
+    update7dChart();
+    setYAxisRange();
+
+    // updating table
+    update24hTable();
+    update7dTable();
 }
 
 QComboBox *MainWindow::getSearchBox() const { return searchBox_; }

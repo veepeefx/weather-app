@@ -15,7 +15,7 @@ private:
     OpenMeteoAPI &openMeteo_;
 
     void saveData(const njson &data);
-    void updateUI();
+    void updateView();
 
 private slots:
     void makeSearch();

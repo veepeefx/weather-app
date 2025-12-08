@@ -40,7 +40,7 @@ void Controller::makeSearch()
     }
 
     saveData(data);
-    updateUI();
+    updateView();
 }
 
 void Controller::saveData(const njson &data)
@@ -78,7 +78,7 @@ void Controller::saveData(const njson &data)
     }
 }
 
-void Controller::updateUI()
+void Controller::updateView()
 {
     // adding resulted city to history and clearing searchBox
     QString resCity = QString::fromStdString(WeatherData::cityName);
@@ -91,5 +91,5 @@ void Controller::updateUI()
             QString::number(WeatherData::currentTemp, 'f', 1) + " °C");
     mainWindow_.getCurrentRainLabel()->setText(
             QString::number(WeatherData::currentRain, 'f', 1) + " mm");
-    mainWindow_.updateCharts();
+    mainWindow_.updateMainWindow();
 }

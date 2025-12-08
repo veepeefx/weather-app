@@ -29,7 +29,7 @@ public:
     [[nodiscard]] QLabel* getCurrentTempLabel() const;
     [[nodiscard]] QLabel* getCurrentRainLabel() const;
 
-    void updateCharts();
+    void updateMainWindow();
     void changePeriod();
 
 private:
