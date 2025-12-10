@@ -5,28 +5,25 @@
 #include <QHeaderView>
 
 
-MainTables::MainTables(QVBoxLayout* mainWindowLayout) : mainWindowLayout_(mainWindowLayout) {}
-
-MainTables::~MainTables()
+MainTables::MainTables(QVBoxLayout* mainWindowLayout, QWidget* parent)
 {
-    delete tableview_;
-    delete model24h_;
-    delete model7d_;
-}
-
-void MainTables::init()
-{
-    tableview_ = new QTableView();
+    tableview_ = new QTableView(parent);
     tableview_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     init24hTable();
     init7dTable();
 
     tableview_->setModel(model24h_);
-    mainWindowLayout_->addWidget(tableview_);
+    mainWindowLayout->addWidget(tableview_);
 }
 
-void MainTables::update()
+MainTables::~MainTables()
+{
+    delete model24h_;
+    delete model7d_;
+}
+
+void MainTables::updateTable()
 {
     update24hTable();
     update7dTable();

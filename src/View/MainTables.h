@@ -5,19 +5,19 @@
 #include <QTableView>
 #include <QVBoxLayout>
 
-class MainTables {
-public:
-    MainTables(QVBoxLayout* mainWindowLayout);
+class MainTables : public QWidget {
 
+    Q_OBJECT
+
+public:
+
+    MainTables(QVBoxLayout* mainWindowLayout, QWidget* parent = nullptr);
     ~MainTables();
 
-    void init();
-    void update();
+    void updateTable();
     void changeTable();
 
 private:
-
-    QVBoxLayout* mainWindowLayout_;
 
     QStandardItemModel *model24h_{nullptr};
     QStandardItemModel *model7d_{nullptr};

@@ -7,19 +7,19 @@
 #include <QValueAxis>
 #include <QVBoxLayout>
 
-class MainCharts {
-public:
-    MainCharts(QVBoxLayout* mainWindowLayout);
+class MainCharts : public QWidget {
 
+    Q_OBJECT
+
+public:
+
+    MainCharts(QVBoxLayout* mainWindowLayout, QWidget* parent = nullptr);
     ~MainCharts();
 
-    void init();
-    void update();
+    void updateChart();
     void changeChart();
 
 private:
-
-    QVBoxLayout* mainWindowLayout_;
 
     // chart items
     QChart *chart24h_{nullptr};

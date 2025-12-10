@@ -22,11 +22,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     initTopMenu();
 
-    charts_ = new MainCharts(mainLayout_);
-    tables_ = new MainTables(mainLayout_);
-
-    charts_->init();
-    tables_->init();
+    charts_ = new MainCharts(mainLayout_, this);
+    tables_ = new MainTables(mainLayout_, this);
 
     this->resize(800,900);
 }
@@ -35,8 +32,6 @@ MainWindow::~MainWindow()
 {
     delete charts_;
     delete tables_;
-
-    delete mainLayout_;
 }
 
 void MainWindow::changePeriod()
@@ -53,8 +48,8 @@ void MainWindow::updateMainWindow(bool searchSuccessful)
     }
 
     updateCurrentWeather();
-    charts_->update();
-    tables_->update();
+    charts_->updateChart();
+    tables_->updateTable();
 }
 
 QComboBox *MainWindow::getSearchBox() const { return searchBox_; }
@@ -110,7 +105,7 @@ void MainWindow::initCurrentWeather()
 void MainWindow::updateCurrentWeather()
 {
     const QString resCity = QString::fromStdString(WeatherData::cityName);
-    //searchBox_->addItem(resCity);
+    searchBox_->addItem(resCity);
     searchBox_->lineEdit()->setText("");
 
     cityLabel_->setText(resCity);

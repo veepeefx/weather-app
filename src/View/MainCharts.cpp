@@ -9,29 +9,26 @@
 #include "../WeatherData.h"
 
 
-MainCharts::MainCharts(QVBoxLayout* mainWindowLayout) : mainWindowLayout_(mainWindowLayout) {}
-
-MainCharts::~MainCharts()
-{
-    delete chartView_;
-    delete chart24h_;
-    delete chart7d_;
-}
-
-void MainCharts::init()
+MainCharts::MainCharts(QVBoxLayout* mainWindowLayout, QWidget* parent)
 {
     init24hChart();
     init7dChart();
 
     // by default 24h chart is displayed
-    chartView_ = new QChartView();
+    chartView_ = new QChartView(parent);
     chartView_->setChart(chart24h_);
     chartView_->setRenderHint(QPainter::Antialiasing);
 
-    mainWindowLayout_->addWidget(chartView_);
+    mainWindowLayout->addWidget(chartView_);
 }
 
-void MainCharts::update()
+MainCharts::~MainCharts()
+{
+    delete chart24h_;
+    delete chart7d_;
+}
+
+void MainCharts::updateChart()
 {
     update24hChart();
     update7dChart();
