@@ -21,7 +21,7 @@ Controller::Controller(MainWindow &window, OpenMeteoAPI &api)
             this, [this] () { mainWindow_.changePeriod(); });
 }
 
-Controller::~Controller() {}
+Controller::~Controller() = default;
 
 void Controller::makeSearch()
 {
@@ -35,12 +35,12 @@ void Controller::makeSearch()
 
     // don't make search if search term was not valid
     if (data.empty()) {
-        mainWindow_.getCityLabel()->setText("[Search not found!]");
+        mainWindow_.updateMainWindow(false);
         return;
     }
 
     saveData(data);
-    updateView();
+    mainWindow_.updateMainWindow();
 }
 
 void Controller::saveData(const njson &data)
@@ -76,20 +76,4 @@ void Controller::saveData(const njson &data)
         WeatherData::rainDaily.push_back(rain.at(i));
         WeatherData::rainProbabilityDailyMax.push_back(rainProbability.at(i));
     }
-}
-
-void Controller::updateView()
-{
-    // adding resulted city to history and clearing searchBox
-    QString resCity = QString::fromStdString(WeatherData::cityName);
-    mainWindow_.getSearchBox()->addItem(resCity);
-    mainWindow_.getSearchBox()->lineEdit()->setText("");
-
-    // updating view
-    mainWindow_.getCityLabel()->setText(resCity);
-    mainWindow_.getCurrentTempLabel()->setText(
-            QString::number(WeatherData::currentTemp, 'f', 1) + " °C");
-    mainWindow_.getCurrentRainLabel()->setText(
-            QString::number(WeatherData::currentRain, 'f', 1) + " mm");
-    mainWindow_.updateMainWindow();
 }

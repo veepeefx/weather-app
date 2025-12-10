@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "MainCharts.h"
 #include "MainTables.h"
+#include "../WeatherData.h"
 
 #include <QVBoxLayout>
 #include <QChartView>
@@ -38,7 +39,35 @@ MainWindow::~MainWindow()
     delete mainLayout_;
 }
 
+void MainWindow::changePeriod()
+{
+    charts_->changeChart();
+    tables_->changeTable();
+}
+
+void MainWindow::updateMainWindow(bool searchSuccessful)
+{
+    if (!searchSuccessful) {
+        cityLabel_->setText("[Search not found!]");
+        return;
+    }
+
+    updateCurrentWeather();
+    charts_->update();
+    tables_->update();
+}
+
+QComboBox *MainWindow::getSearchBox() const { return searchBox_; }
+QPushButton *MainWindow::getSearchButton() const { return searchButton_; }
+QPushButton *MainWindow::getChangePeriodButton() const { return changePeriodButton_; }
+
 void MainWindow::initTopMenu()
+{
+    initSearchMenu();
+    initCurrentWeather();
+}
+
+void MainWindow::initSearchMenu()
 {
     searchBox_ = new QComboBox();
     searchBox_->setEditable(true);
@@ -55,7 +84,11 @@ void MainWindow::initTopMenu()
     searchLayout->addWidget(changePeriodButton_);
 
     mainLayout_->addLayout(searchLayout);
+}
 
+
+void MainWindow::initCurrentWeather()
+{
     cityLabel_ = new QLabel("[Search for results]");
     cityLabel_->setStyleSheet("font-size: 24px; font-weight: bold;");
 
@@ -74,25 +107,18 @@ void MainWindow::initTopMenu()
     mainLayout_->addLayout(infoLayout);
 }
 
-void MainWindow::changePeriod()
+void MainWindow::updateCurrentWeather()
 {
-    charts_->changeChart();
-    tables_->changeTable();
+    const QString resCity = QString::fromStdString(WeatherData::cityName);
+    //searchBox_->addItem(resCity);
+    searchBox_->lineEdit()->setText("");
+
+    cityLabel_->setText(resCity);
+    currentTempLabel_->setText(
+        QString::number(WeatherData::currentTemp, 'f', 1) + " °C");
+    currentRainLabel_->setText(
+        QString::number(WeatherData::currentRain, 'f', 1) + " mm");
 }
-
-void MainWindow::updateMainWindow()
-{
-    charts_->update();
-    tables_->update();
-}
-
-QComboBox *MainWindow::getSearchBox() const { return searchBox_; }
-QPushButton *MainWindow::getSearchButton() const { return searchButton_; }
-QPushButton *MainWindow::getChangePeriodButton() const { return changePeriodButton_; }
-QLabel *MainWindow::getCityLabel() const { return cityLabel_; }
-QLabel *MainWindow::getCurrentTempLabel() const { return currentTempLabel_; }
-QLabel *MainWindow::getCurrentRainLabel() const { return currentRainLabel_; }
-
 
 // sets focus to window itself
 void MainWindow::showEvent(QShowEvent *event)

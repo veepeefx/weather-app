@@ -5,17 +5,17 @@
 
 namespace WeatherData {
 
-    inline std::string cityName;
-    inline float currentTemp;
-    inline float currentRain;
-    inline std::vector<float> tempHourly;
-    inline std::vector<float> rainHourly;
-    inline std::vector<float> rainProbabilityHourly;
+    inline std::string cityName{};
+    inline float currentTemp{0.0f};
+    inline float currentRain{0.0f};
+    inline std::vector<float> tempHourly{};
+    inline std::vector<float> rainHourly{};
+    inline std::vector<float> rainProbabilityHourly{};
 
-    inline std::vector<float> maxTempDaily;
-    inline std::vector<float> minTempDaily;
-    inline std::vector<float> rainDaily;
-    inline std::vector<float> rainProbabilityDailyMax;
+    inline std::vector<float> maxTempDaily{};
+    inline std::vector<float> minTempDaily{};
+    inline std::vector<float> rainDaily{};
+    inline std::vector<float> rainProbabilityDailyMax{};
 
     inline void initVectorReserve()
     {

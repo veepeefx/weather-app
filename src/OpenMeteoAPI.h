@@ -7,9 +7,8 @@ using njson = nlohmann::json;
 
 class OpenMeteoAPI {
 public:
-    OpenMeteoAPI();
-
-    ~OpenMeteoAPI();
+    OpenMeteoAPI() = default;
+    ~OpenMeteoAPI() = default;
 
     njson getWeatherData(const std::string& search);
 

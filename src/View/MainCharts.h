@@ -22,19 +22,19 @@ private:
     QVBoxLayout* mainWindowLayout_;
 
     // chart items
-    QChart *chart24h_;
-    QLineSeries *tempSeries24h_;
-    QBarSeries *rainSeries24h_;
-    QValueAxis *tempYAxis24h_;
-    QValueAxis *rainYAxis24h_;
+    QChart *chart24h_{nullptr};
+    QLineSeries *tempSeries24h_{nullptr};
+    QBarSeries *rainSeries24h_{nullptr};
+    QValueAxis *tempYAxis24h_{nullptr};
+    QValueAxis *rainYAxis24h_{nullptr};
 
-    QChart *chart7d_;
-    QLineSeries *tempSeries7d_;
-    QBarSeries *rainSeries7d_;
-    QValueAxis *tempYAxis7d_;
-    QValueAxis *rainYAxis7d_;
+    QChart *chart7d_{nullptr};
+    QLineSeries *tempSeries7d_{nullptr};
+    QBarSeries *rainSeries7d_{nullptr};
+    QValueAxis *tempYAxis7d_{nullptr};
+    QValueAxis *rainYAxis7d_{nullptr};
 
-    QChartView *chartView_;
+    QChartView *chartView_{nullptr};
 
     void init24hChart();
     void init7dChart();

@@ -7,10 +7,6 @@
 
 using njson = nlohmann::json;
 
-OpenMeteoAPI::OpenMeteoAPI() {}
-
-OpenMeteoAPI::~OpenMeteoAPI() {}
-
 njson OpenMeteoAPI::apiRequest(const std::string& baseUrl, const std::string& searchUrl)
 {
     httplib::Client cli(baseUrl);

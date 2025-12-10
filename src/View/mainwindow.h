@@ -18,32 +18,34 @@ public:
 
     ~MainWindow() override;
 
+    void changePeriod();
+    void updateMainWindow(bool searchSuccessful = true);
+
     // getters
     [[nodiscard]] QComboBox* getSearchBox() const;
     [[nodiscard]] QPushButton* getSearchButton() const;
     [[nodiscard]] QPushButton* getChangePeriodButton() const;
-    [[nodiscard]] QLabel* getCityLabel() const;
-    [[nodiscard]] QLabel* getCurrentTempLabel() const;
-    [[nodiscard]] QLabel* getCurrentRainLabel() const;
-
-    void updateMainWindow();
-    void changePeriod();
 
 private:
-    QVBoxLayout *mainLayout_;
-
-    // Qt widgets
-    QComboBox *searchBox_;
-    QPushButton *searchButton_;
-    QPushButton *changePeriodButton_;
-    QLabel *cityLabel_;
-    QLabel *currentTempLabel_;
-    QLabel *currentRainLabel_;
 
     MainCharts *charts_;
     MainTables *tables_;
 
+    QVBoxLayout *mainLayout_;
+
+    // Qt widgets
+    QComboBox *searchBox_{nullptr};
+    QPushButton *searchButton_{nullptr};
+    QPushButton *changePeriodButton_{nullptr};
+    QLabel *cityLabel_{nullptr};
+    QLabel *currentTempLabel_{nullptr};
+    QLabel *currentRainLabel_{nullptr};
+
     void initTopMenu();
+    void initSearchMenu();
+    void initCurrentWeather();
+    void updateCurrentWeather();
+
     void showEvent(QShowEvent *event) override;
 
 private

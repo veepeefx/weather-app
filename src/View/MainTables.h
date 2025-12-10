@@ -19,9 +19,9 @@ private:
 
     QVBoxLayout* mainWindowLayout_;
 
-    QStandardItemModel *model24h_;
-    QStandardItemModel *model7d_;
-    QTableView *tableview_;
+    QStandardItemModel *model24h_{nullptr};
+    QStandardItemModel *model7d_{nullptr};
+    QTableView *tableview_{nullptr};
 
     void init24hTable();
     void init7dTable();
