@@ -93,6 +93,46 @@ void MainCharts::init24hChart()
     rainSeries24h_->attachAxis(rainXAxis);
 }
 
+void MainCharts::init7dChart()
+{
+    chart7d_ = new QChart();
+
+    QBarCategoryAxis *rainXAxis = new QBarCategoryAxis();
+    rainXAxis->setVisible(false);
+    rainXAxis->setCategories({"1", "2", "3", "4", "5", "6", "7"});
+
+    QDateTimeAxis *tempXAxis = new QDateTimeAxis();
+    tempXAxis->setFormat("ddd dd.MM");
+
+    // time starts from the beginning of the day
+    QDateTime start = QDateTime(QDate::currentDate(), QTime(0,0,0));
+    QDateTime end = start.addDays(7);
+
+    tempXAxis->setRange(start, end);
+    tempXAxis->setTickCount(8);
+
+    tempSeries7d_ = new QLineSeries();
+    rainSeries7d_ = new QBarSeries();
+
+    // base values
+    tempYAxis7d_ = new QValueAxis();
+    tempYAxis7d_->setRange(-20, 20);
+    rainYAxis7d_ = new QValueAxis();
+    rainYAxis7d_->setRange(0, 20);
+
+    chart7d_->addSeries(rainSeries7d_);
+    chart7d_->addSeries(tempSeries7d_);
+
+    chart7d_->addAxis(tempYAxis7d_, Qt::AlignLeft);
+    tempSeries7d_->attachAxis(tempYAxis7d_);
+    chart7d_->addAxis(rainYAxis7d_, Qt::AlignRight);
+    rainSeries7d_->attachAxis(rainYAxis7d_);
+
+    chart7d_->addAxis(tempXAxis, Qt::AlignBottom);
+    tempSeries7d_->attachAxis(tempXAxis);
+    chart7d_->addAxis(rainXAxis, Qt::AlignBottom);
+    rainSeries7d_->attachAxis(rainXAxis);
+}
 
 void MainCharts::update24hChart()
 {
@@ -133,49 +173,6 @@ void MainCharts::update7dChart()
 
     rainSeries7d_->append(rainSet);
 }
-
-
-void MainCharts::init7dChart()
-{
-    chart7d_ = new QChart();
-
-    QBarCategoryAxis *rainXAxis = new QBarCategoryAxis();
-    rainXAxis->setVisible(false);
-    rainXAxis->setCategories({"0", "1", "2", "3", "4", "5", "6", "7"});
-
-    QDateTimeAxis *tempXAxis = new QDateTimeAxis();
-    tempXAxis->setFormat("ddd dd.MM");
-
-    // time starts from the beginning of the day
-    QDateTime start = QDateTime(QDate::currentDate(), QTime(0,0,0));
-    QDateTime end = start.addDays(7);
-
-    tempXAxis->setRange(start, end);
-    tempXAxis->setTickCount(8);
-
-    tempSeries7d_ = new QLineSeries();
-    rainSeries7d_ = new QBarSeries();
-
-    // base values
-    tempYAxis7d_ = new QValueAxis();
-    tempYAxis7d_->setRange(-20, 20);
-    rainYAxis7d_ = new QValueAxis();
-    rainYAxis7d_->setRange(0, 20);
-
-    chart7d_->addSeries(rainSeries7d_);
-    chart7d_->addSeries(tempSeries7d_);
-
-    chart7d_->addAxis(tempYAxis7d_, Qt::AlignLeft);
-    tempSeries7d_->attachAxis(tempYAxis7d_);
-    chart7d_->addAxis(rainYAxis7d_, Qt::AlignRight);
-    rainSeries7d_->attachAxis(rainYAxis7d_);
-
-    chart7d_->addAxis(tempXAxis, Qt::AlignBottom);
-    tempSeries7d_->attachAxis(tempXAxis);
-    chart7d_->addAxis(rainXAxis, Qt::AlignBottom);
-    rainSeries7d_->attachAxis(rainXAxis);
-}
-
 
 // ranges y-axis so it is easy to read
 void MainCharts::setYAxisRange()
