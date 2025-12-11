@@ -18,7 +18,7 @@ njson OpenMeteoAPI::apiRequest(const std::string& baseUrl, const std::string& se
                 return njson::parse(res->body);
 
             } catch (njson::parse_error& e) {
-                std::cerr << "JSON parse error: " << e.what() << std::endl;
+                std::cerr << "JSON parse error API request: " << e.what() << std::endl;
             } catch (std::exception& e) {
                 std::cerr << "Error during parse (not JSON): " << e.what() << std::endl;
             }

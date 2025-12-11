@@ -1,5 +1,7 @@
 #include "Controller.h"
 
+#include <iostream>
+
 #include "../View/mainwindow.h"
 
 #include <QObject>
@@ -22,6 +24,17 @@ Controller::Controller(MainWindow &window, DataHandler &handler)
 
 Controller::~Controller() = default;
 
+// searches the place which was done before closing the application
+void Controller::makeLatestSearch()
+{
+    const QStringList& history = dataHandler_.getHistory();
+    if (!history.isEmpty()) {
+        bool update = dataHandler_.updateData(history.at(0).toStdString());
+        mainWindow_.updateMainWindow(update);
+    }
+}
+
+// searches place
 void Controller::makeSearch()
 {
     std::string search = mainWindow_.getSearchBox()->lineEdit()->text().toStdString();

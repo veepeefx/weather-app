@@ -10,6 +10,8 @@ public:
     Controller(MainWindow &window, DataHandler &handler);
     ~Controller();
 
+    void makeLatestSearch();
+
 private:
     MainWindow &mainWindow_;
     DataHandler &dataHandler_;

@@ -1,14 +1,20 @@
 #include "DataHandler.h"
+
+#include <fstream>
+#include <iostream>
+
 #include "json.hpp"
 #include "OpenMeteoAPI.h"
 
 DataHandler::DataHandler()
 {
     weather_ = new ForecastData();
+    loadCache();
 }
 
 DataHandler::~DataHandler()
 {
+    saveCache();
     delete weather_;
 }
 
@@ -24,13 +30,12 @@ bool DataHandler::updateData(const std::string& search)
     }
 
     saveData(data);
+    addHistoryEntry(weather_->cityName);
     return true;
 }
 
-ForecastData* DataHandler::getData() const
-{
-    return weather_;
-}
+ForecastData* DataHandler::getData() const { return weather_; }
+const QStringList& DataHandler::getHistory() const { return history_; }
 
 void DataHandler::saveData(const njson &data)
 {
@@ -67,3 +72,67 @@ void DataHandler::saveData(const njson &data)
         weather_->rainProbabilityDailyMax.push_back(rainProbability.at(i));
     }
 }
+
+// adds entry to history_ from latest to oldest
+void DataHandler::addHistoryEntry(const std::string &entry)
+{
+    QString qEntry = QString::fromStdString(entry);
+    history_.removeAll(qEntry);
+    history_.push_front(qEntry);
+}
+
+void DataHandler::saveCache()
+{
+    njson cache;
+    int i = 0;
+
+    // saving history to cache
+    for (const QString& city : history_) {
+        // saving max 5 seaches
+        if (i >= 5) {
+            break;
+        }
+
+        cache["history"].push_back(city.toStdString());
+        i++;
+    }
+
+    // writing it to json file
+    std::ofstream file("history_cache.json");
+    if (file.is_open()) {
+        file << cache.dump(4);
+        file.close();
+    }
+}
+
+void DataHandler::loadCache()
+{
+    std::ifstream file("history_cache.json");
+    if (!file.is_open()) {
+        return;
+    }
+
+    njson cache;
+
+    // checking if file is empty
+    if (file.peek() == std::ifstream::traits_type::eof()) {
+        return;
+    }
+
+    // loads json to cache
+    try {
+        file >> cache;
+    } catch (njson::parse_error& e) {
+        std::cerr << "JSON parse error loading cache: " << e.what() << std::endl;
+    }
+
+    file.close();
+
+    // rebuilding history from the cache
+    if (cache.contains("history")) {
+        for (int i = cache["history"].size() - 1; i >= 0; i--) {
+            addHistoryEntry(cache["history"].at(i));
+        }
+    }
+}
+

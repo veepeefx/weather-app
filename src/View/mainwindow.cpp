@@ -106,9 +106,11 @@ void MainWindow::initCurrentWeather()
 
 void MainWindow::updateCurrentWeather(const ForecastData* data)
 {
-    const QString resCity = QString::fromStdString(data->cityName);
-    searchBox_->addItem(resCity);
+    searchBox_->clear();
+    searchBox_->addItems(dataHandler_->getHistory());
     searchBox_->lineEdit()->setText("");
+
+    const QString resCity = QString::fromStdString(data->cityName);
 
     cityLabel_->setText(resCity);
     currentTempLabel_->setText(
