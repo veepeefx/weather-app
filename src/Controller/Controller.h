@@ -1,20 +1,18 @@
 #ifndef WEATHERAPP_CONTROLLER_H
 #define WEATHERAPP_CONTROLLER_H
 #include "../View/mainwindow.h"
-#include "../Model/OpenMeteoAPI.h"
+#include "../Model/DataHandler.h"
+
 
 class Controller : public QObject {
     Q_OBJECT
 public:
-    Controller(MainWindow &window, OpenMeteoAPI &api);
-
+    Controller(MainWindow &window, DataHandler &handler);
     ~Controller();
 
 private:
     MainWindow &mainWindow_;
-    OpenMeteoAPI &openMeteo_;
-
-    void saveData(const njson &data);
+    DataHandler &dataHandler_;
 
 private slots:
     void makeSearch();

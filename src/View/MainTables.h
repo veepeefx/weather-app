@@ -5,6 +5,8 @@
 #include <QTableView>
 #include <QVBoxLayout>
 
+#include "../Model/ForecastData.h"
+
 class MainTables : public QWidget {
 
     Q_OBJECT
@@ -14,7 +16,7 @@ public:
     MainTables(QVBoxLayout* mainWindowLayout, QWidget* parent = nullptr);
     ~MainTables();
 
-    void updateTable();
+    void updateTable(const ForecastData* data);
     void changeTable();
 
 private:
@@ -26,8 +28,8 @@ private:
     void init24hTable();
     void init7dTable();
 
-    void update24hTable();
-    void update7dTable();
+    void update24hTable(const ForecastData* data);
+    void update7dTable(const ForecastData* data);
 };
 
 

@@ -10,16 +10,18 @@
 #include "MainTables.h"
 
 
+class DataHandler;
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(DataHandler* model, QWidget *parent = nullptr);
 
     ~MainWindow() override;
 
     void changePeriod();
-    void updateMainWindow(bool searchSuccessful = true);
+    void updateMainWindow(bool searchSuccessful);
 
     // getters
     [[nodiscard]] QComboBox* getSearchBox() const;
@@ -28,6 +30,7 @@ public:
 
 private:
 
+    DataHandler *dataHandler_;
     MainCharts *charts_;
     MainTables *tables_;
 
@@ -44,7 +47,7 @@ private:
     void initTopMenu();
     void initSearchMenu();
     void initCurrentWeather();
-    void updateCurrentWeather();
+    void updateCurrentWeather(const ForecastData *data);
 
     void showEvent(QShowEvent *event) override;
 

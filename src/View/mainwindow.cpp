@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "MainCharts.h"
 #include "MainTables.h"
-#include "../Model/WeatherData.h"
 
 #include <QVBoxLayout>
 #include <QChartView>
@@ -11,8 +10,10 @@
 #include <QLineEdit>
 #include <QPushButton>
 
+#include "../Model/DataHandler.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+
+MainWindow::MainWindow(DataHandler* model, QWidget *parent) : QMainWindow(parent), dataHandler_(model)
 {
     QWidget *centralWidget = new QWidget(this);
     this->setCentralWidget(centralWidget);
@@ -47,9 +48,10 @@ void MainWindow::updateMainWindow(bool searchSuccessful)
         return;
     }
 
-    updateCurrentWeather();
-    charts_->updateChart();
-    tables_->updateTable();
+    const ForecastData* data = dataHandler_->getData();
+    updateCurrentWeather(data);
+    charts_->updateChart(data);
+    tables_->updateTable(data);
 }
 
 QComboBox *MainWindow::getSearchBox() const { return searchBox_; }
@@ -102,17 +104,17 @@ void MainWindow::initCurrentWeather()
     mainLayout_->addLayout(infoLayout);
 }
 
-void MainWindow::updateCurrentWeather()
+void MainWindow::updateCurrentWeather(const ForecastData* data)
 {
-    const QString resCity = QString::fromStdString(WeatherData::cityName);
+    const QString resCity = QString::fromStdString(data->cityName);
     searchBox_->addItem(resCity);
     searchBox_->lineEdit()->setText("");
 
     cityLabel_->setText(resCity);
     currentTempLabel_->setText(
-        QString::number(WeatherData::currentTemp, 'f', 1) + " °C");
+        QString::number(data->currentTemp, 'f', 1) + " °C");
     currentRainLabel_->setText(
-        QString::number(WeatherData::currentRain, 'f', 1) + " mm");
+        QString::number(data->currentRain, 'f', 1) + " mm");
 }
 
 // sets focus to window itself

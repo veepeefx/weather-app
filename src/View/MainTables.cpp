@@ -1,8 +1,9 @@
 #include "MainTables.h"
-#include "../Model/WeatherData.h"
 
 #include <QDateTime>
 #include <QHeaderView>
+
+#include "../Model/ForecastData.h"
 
 
 MainTables::MainTables(QVBoxLayout* mainWindowLayout, QWidget* parent)
@@ -23,10 +24,10 @@ MainTables::~MainTables()
     delete model7d_;
 }
 
-void MainTables::updateTable()
+void MainTables::updateTable(const ForecastData* data)
 {
-    update24hTable();
-    update7dTable();
+    update24hTable(data);
+    update7dTable(data);
 }
 
 void MainTables::changeTable()
@@ -66,30 +67,30 @@ void MainTables::init7dTable()
     model7d_->setVerticalHeaderLabels(list);
 }
 
-void MainTables::update24hTable()
+void MainTables::update24hTable(const ForecastData* data)
 {
     int hour = QTime::currentTime().hour();
 
     for (int i = 0; i < 24; i++) {
         model24h_->setItem(i, 0, new QStandardItem(
-            QString::number(WeatherData::tempHourly[i + hour], 'f', 1)));
+            QString::number(data->tempHourly[i + hour], 'f', 1)));
         model24h_->setItem(i, 1, new QStandardItem(
-            QString::number(WeatherData::rainHourly[i + hour], 'f', 1)));
+            QString::number(data->rainHourly[i + hour], 'f', 1)));
         model24h_->setItem(i, 2, new QStandardItem(
-            QString::number(WeatherData::rainProbabilityHourly[i + hour], 'f', 1)));
+            QString::number(data->rainProbabilityHourly[i + hour], 'f', 1)));
     }
 }
 
-void MainTables::update7dTable()
+void MainTables::update7dTable(const ForecastData* data)
 {
     for (int i = 0; i < 7; i++) {
         model7d_->setItem(i, 0, new QStandardItem(
-            QString::number(WeatherData::maxTempDaily[i], 'f', 1)));
+            QString::number(data->maxTempDaily[i], 'f', 1)));
         model7d_->setItem(i, 1, new QStandardItem(
-            QString::number(WeatherData::minTempDaily[i], 'f', 1)));
+            QString::number(data->minTempDaily[i], 'f', 1)));
         model7d_->setItem(i, 2, new QStandardItem(
-            QString::number(WeatherData::rainDaily[i], 'f', 1)));
+            QString::number(data->rainDaily[i], 'f', 1)));
         model7d_->setItem(i, 3, new QStandardItem(
-            QString::number(WeatherData::rainProbabilityDailyMax[i], 'f', 1)));
+            QString::number(data->rainProbabilityDailyMax[i], 'f', 1)));
     }
 }

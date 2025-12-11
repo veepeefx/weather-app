@@ -1,21 +1,20 @@
 #include <QApplication>
 
 #include "Controller/Controller.h"
+#include "Model/DataHandler.h"
 #include "View/mainwindow.h"
-#include "Model/WeatherData.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
     QCoreApplication::setApplicationName("Weather App");
 
-    MainWindow w;
-    w.setWindowFlags(Qt::Window);
-    w.show();
+    DataHandler model;
 
-    OpenMeteoAPI api;
+    MainWindow view(&model);
+    view.setWindowFlags(Qt::Window);
+    view.show();
 
-    WeatherData::initVectorReserve();
-    Controller controller(w, api);
+    Controller controller(view, model);
 
     return QApplication::exec();
 }

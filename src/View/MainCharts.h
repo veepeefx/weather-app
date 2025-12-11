@@ -7,6 +7,8 @@
 #include <QValueAxis>
 #include <QVBoxLayout>
 
+#include "../Model/ForecastData.h"
+
 class MainCharts : public QWidget {
 
     Q_OBJECT
@@ -16,7 +18,7 @@ public:
     MainCharts(QVBoxLayout* mainWindowLayout, QWidget* parent = nullptr);
     ~MainCharts();
 
-    void updateChart();
+    void updateChart(const ForecastData* data);
     void changeChart();
 
 private:
@@ -39,10 +41,10 @@ private:
     void init24hChart();
     void init7dChart();
 
-    void update24hChart();
-    void update7dChart();
+    void update24hChart(const ForecastData* data);
+    void update7dChart(const ForecastData* data);
 
-    void setYAxisRange();
+    void setYAxisRange(const ForecastData* data);
 };
 
 

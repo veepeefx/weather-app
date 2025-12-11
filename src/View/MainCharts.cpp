@@ -6,7 +6,6 @@
 #include <QVBoxLayout>
 #include <QDateTime>
 
-#include "../Model/WeatherData.h"
 
 
 MainCharts::MainCharts(QVBoxLayout* mainWindowLayout, QWidget* parent)
@@ -28,12 +27,12 @@ MainCharts::~MainCharts()
     delete chart7d_;
 }
 
-void MainCharts::updateChart()
+void MainCharts::updateChart(const ForecastData* data)
 {
-    update24hChart();
-    update7dChart();
+    update24hChart(data);
+    update7dChart(data);
 
-    setYAxisRange();
+    setYAxisRange(data);
 }
 
 void MainCharts::changeChart()
@@ -134,7 +133,7 @@ void MainCharts::init7dChart()
     rainSeries7d_->attachAxis(rainXAxis);
 }
 
-void MainCharts::update24hChart()
+void MainCharts::update24hChart(const ForecastData* data)
 {
     tempSeries24h_->clear();
     rainSeries24h_->clear();
@@ -149,13 +148,13 @@ void MainCharts::update24hChart()
         QDateTime dt = startHour.addSecs(i * 3600);
         // QVector temp and rain starts from 0:00 so we need to leave out hours before current time
         // hour and then + i to go forward as loop goes through
-        tempSeries24h_->append(dt.toMSecsSinceEpoch(), WeatherData::tempHourly[hour + i]);
-        *rainSet << WeatherData::rainHourly[hour + i];
+        tempSeries24h_->append(dt.toMSecsSinceEpoch(), data->tempHourly[hour + i]);
+        *rainSet << data->rainHourly[hour + i];
     }
     rainSeries24h_->append(rainSet);
 }
 
-void MainCharts::update7dChart()
+void MainCharts::update7dChart(const ForecastData *data)
 {
     tempSeries7d_->clear();
     rainSeries7d_->clear();
@@ -164,10 +163,10 @@ void MainCharts::update7dChart()
     QDateTime now = QDateTime::currentDateTime();
 
     for (int i = 0; i < 7; ++i) {
-        *rainSet << WeatherData::rainDaily[i];
+        *rainSet << data->rainDaily[i];
         for (int j = 0; j < 24; ++j) {
             QDateTime dt(QDate(now.date()).addDays(i), QTime(j, 0, 0));
-            tempSeries7d_->append(dt.toMSecsSinceEpoch(), WeatherData::tempHourly[i * 24 + j]);
+            tempSeries7d_->append(dt.toMSecsSinceEpoch(), data->tempHourly[i * 24 + j]);
         }
     }
 
@@ -175,15 +174,15 @@ void MainCharts::update7dChart()
 }
 
 // ranges y-axis so it is easy to read
-void MainCharts::setYAxisRange()
+void MainCharts::setYAxisRange(const ForecastData* data)
 {
     int hour = QDateTime::currentDateTime().time().hour();
 
     // 24h
     // temp axis
     auto tempRange = std::minmax_element(
-    WeatherData::tempHourly.begin() + hour,
-    WeatherData::tempHourly.begin() + hour + 25
+    data->tempHourly.begin() + hour,
+    data->tempHourly.begin() + hour + 25
     );
 
     tempYAxis24h_->setRange(*tempRange.first - 5, *tempRange.second + 5);
@@ -192,8 +191,8 @@ void MainCharts::setYAxisRange()
 
     // rain axis
     auto maxRain = std::max_element(
-        WeatherData::rainHourly.begin() + hour,
-        WeatherData::rainHourly.begin() + hour + 25);
+        data->rainHourly.begin() + hour,
+        data->rainHourly.begin() + hour + 25);
 
     float upLimit = 4;
     if (*maxRain >= 3) {
@@ -205,14 +204,14 @@ void MainCharts::setYAxisRange()
 
     // 7d
     // temp axis
-    auto maxWeeklyTemp = std::ranges::max_element(WeatherData::maxTempDaily);
-    auto minWeeklyTemp = std::ranges::min_element(WeatherData::minTempDaily);
+    auto maxWeeklyTemp = std::ranges::max_element(data->maxTempDaily);
+    auto minWeeklyTemp = std::ranges::min_element(data->minTempDaily);
     tempYAxis7d_->setRange(*minWeeklyTemp - 5, *maxWeeklyTemp + 5);
     tempYAxis7d_->applyNiceNumbers();
     tempYAxis7d_->setTickCount(5);
 
     // rain axis
-    auto maxDaily = std::ranges::max_element(WeatherData::rainDaily);
+    auto maxDaily = std::ranges::max_element(data->rainDaily);
 
     upLimit = 4;
     if (*maxDaily >= 3) {
