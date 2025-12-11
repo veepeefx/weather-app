@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "MainCharts.h"
 #include "MainTables.h"
+#include "../Model/DataHandler.h"
 
 #include <QVBoxLayout>
 #include <QChartView>
@@ -9,8 +10,6 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QPushButton>
-
-#include "../Model/DataHandler.h"
 
 
 MainWindow::MainWindow(DataHandler* model, QWidget *parent) : QMainWindow(parent), dataHandler_(model)

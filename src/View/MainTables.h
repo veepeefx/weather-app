@@ -1,11 +1,12 @@
 #ifndef WEATHERAPP_MAINTABLES_H
 #define WEATHERAPP_MAINTABLES_H
 
+#include "../Model/ForecastData.h"
+
 #include <QStandardItemModel>
 #include <QTableView>
 #include <QVBoxLayout>
 
-#include "../Model/ForecastData.h"
 
 class MainTables : public QWidget {
 

@@ -7,7 +7,6 @@
 #include <QDateTime>
 
 
-
 MainCharts::MainCharts(QVBoxLayout* mainWindowLayout, QWidget* parent)
 {
     init24hChart();

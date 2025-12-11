@@ -1,5 +1,4 @@
 #include "OpenMeteoAPI.h"
-
 #include "httplib.h"
 #include "json.hpp"
 

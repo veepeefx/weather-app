@@ -1,14 +1,11 @@
 #include "Controller.h"
-
-#include <iostream>
-
 #include "../View/mainwindow.h"
+#include "../Model/DataHandler.h"
 
 #include <QObject>
 #include <QLineEdit>
 #include <QPushButton>
 
-#include "../Model/DataHandler.h"
 
 Controller::Controller(MainWindow &window, DataHandler &handler)
 : dataHandler_(handler), mainWindow_(window)

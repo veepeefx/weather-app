@@ -1,9 +1,10 @@
 #ifndef WEATHERAPP_DATAHANDLER_H
 #define WEATHERAPP_DATAHANDLER_H
-#include <QStringList>
 
 #include "ForecastData.h"
 #include "json.hpp"
+
+#include <QStringList>
 
 using njson = nlohmann::json;
 

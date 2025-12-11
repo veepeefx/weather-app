@@ -1,13 +1,13 @@
 #ifndef WEATHERAPP_MAINCHARTS_H
 #define WEATHERAPP_MAINCHARTS_H
 
+#include "../Model/ForecastData.h"
+
 #include <QBarSeries>
 #include <QChartView>
 #include <QLineSeries>
 #include <QValueAxis>
 #include <QVBoxLayout>
-
-#include "../Model/ForecastData.h"
 
 class MainCharts : public QWidget {
 

@@ -1,8 +1,10 @@
 #ifndef WEATHERAPP_OPENMETEOAPI_H
 #define WEATHERAPP_OPENMETEOAPI_H
-#include <string>
 
 #include "json.hpp"
+
+#include <string>
+
 using njson = nlohmann::json;
 
 class OpenMeteoAPI {
@@ -23,5 +25,6 @@ private:
     // returns coordinates latitude, longitude
     std::pair<std::pair<float, float>, std::string> getCoordinates(const std::string& search);
 };
+
 
 #endif //WEATHERAPP_OPENMETEOAPI_H

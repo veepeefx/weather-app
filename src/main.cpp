@@ -1,8 +1,9 @@
-#include <QApplication>
-
 #include "Controller/Controller.h"
 #include "Model/DataHandler.h"
 #include "View/mainwindow.h"
+
+#include <QApplication>
+
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);

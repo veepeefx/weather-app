@@ -1,10 +1,10 @@
 #include "DataHandler.h"
+#include "OpenMeteoAPI.h"
+#include "json.hpp"
 
 #include <fstream>
 #include <iostream>
 
-#include "json.hpp"
-#include "OpenMeteoAPI.h"
 
 DataHandler::DataHandler()
 {
@@ -21,7 +21,6 @@ DataHandler::~DataHandler()
 bool DataHandler::updateData(const std::string& search)
 {
     OpenMeteoAPI meteoApi;
-
     const njson data = meteoApi.getWeatherData(search);
 
     // don't make search if search term was not valid or api call has some problems
@@ -31,6 +30,7 @@ bool DataHandler::updateData(const std::string& search)
 
     saveData(data);
     addHistoryEntry(weather_->cityName);
+
     return true;
 }
 
@@ -108,18 +108,15 @@ void DataHandler::saveCache()
 void DataHandler::loadCache()
 {
     std::ifstream file("history_cache.json");
-    if (!file.is_open()) {
+
+    // checking if file is opened and fiel isn't empty
+    if (!file.is_open() ||
+        file.peek() == std::ifstream::traits_type::eof()) {
         return;
     }
 
+    // loads file to json format
     njson cache;
-
-    // checking if file is empty
-    if (file.peek() == std::ifstream::traits_type::eof()) {
-        return;
-    }
-
-    // loads json to cache
     try {
         file >> cache;
     } catch (njson::parse_error& e) {

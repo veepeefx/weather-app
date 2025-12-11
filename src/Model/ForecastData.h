@@ -1,5 +1,6 @@
 #ifndef WEATHERAPP_FORECASTDATA_H
 #define WEATHERAPP_FORECASTDATA_H
+
 #include <string>
 #include <vector>
 

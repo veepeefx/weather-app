@@ -1,9 +1,8 @@
 #include "MainTables.h"
+#include "../Model/ForecastData.h"
 
 #include <QDateTime>
 #include <QHeaderView>
-
-#include "../Model/ForecastData.h"
 
 
 MainTables::MainTables(QVBoxLayout* mainWindowLayout, QWidget* parent)

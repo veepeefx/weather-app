@@ -1,5 +1,6 @@
 #ifndef WEATHERAPP_CONTROLLER_H
 #define WEATHERAPP_CONTROLLER_H
+
 #include "../View/mainwindow.h"
 #include "../Model/DataHandler.h"
 

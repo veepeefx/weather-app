@@ -1,16 +1,15 @@
 #ifndef WEATHERAPP_MAINWINDOW_H
 #define WEATHERAPP_MAINWINDOW_H
 
+#include "MainCharts.h"
+#include "MainTables.h"
+#include "../Model/DataHandler.h"
+
 #include <QComboBox>
 #include <QLabel>
 #include <QMainWindow>
 #include <QPushButton>
 
-#include "MainCharts.h"
-#include "MainTables.h"
-
-
-class DataHandler;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
