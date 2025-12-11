@@ -17,11 +17,11 @@ find_package(Qt6 REQUIRED COMPONENTS
 add_executable(weatherApp src/main.cpp
         src/View/mainwindow.cpp
         src/View/mainwindow.h
-        src/OpenMeteoAPI.cpp
-        src/OpenMeteoAPI.h
-        src/Controller.cpp
-        src/Controller.h
-        src/WeatherData.h
+        src/Model/OpenMeteoAPI.cpp
+        src/Model/OpenMeteoAPI.h
+        src/Controller/Controller.cpp
+        src/Controller/Controller.h
+        src/Model/WeatherData.h
         src/View/MainCharts.cpp
         src/View/MainCharts.h
         src/View/MainTables.cpp

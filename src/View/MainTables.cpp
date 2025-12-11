@@ -1,5 +1,5 @@
 #include "MainTables.h"
-#include "../WeatherData.h"
+#include "../Model/WeatherData.h"
 
 #include <QDateTime>
 #include <QHeaderView>

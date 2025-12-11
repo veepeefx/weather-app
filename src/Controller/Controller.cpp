@@ -1,12 +1,12 @@
 #include "Controller.h"
 
-#include "View/mainwindow.h"
+#include "../View/mainwindow.h"
 
 #include <QObject>
 #include <QLineEdit>
 #include <QPushButton>
 
-#include "WeatherData.h"
+#include "../Model/WeatherData.h"
 
 
 Controller::Controller(MainWindow &window, OpenMeteoAPI &api)

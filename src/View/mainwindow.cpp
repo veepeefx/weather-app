@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "MainCharts.h"
 #include "MainTables.h"
-#include "../WeatherData.h"
+#include "../Model/WeatherData.h"
 
 #include <QVBoxLayout>
 #include <QChartView>

@@ -1,8 +1,8 @@
 #include <QApplication>
 
-#include "Controller.h"
+#include "Controller/Controller.h"
 #include "View/mainwindow.h"
-#include "WeatherData.h"
+#include "Model/WeatherData.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);

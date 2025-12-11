@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include <QDateTime>
 
-#include "../WeatherData.h"
+#include "../Model/WeatherData.h"
 
 
 MainCharts::MainCharts(QVBoxLayout* mainWindowLayout, QWidget* parent)
