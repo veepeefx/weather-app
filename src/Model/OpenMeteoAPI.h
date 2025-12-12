@@ -12,6 +12,7 @@ public:
     OpenMeteoAPI() = default;
     ~OpenMeteoAPI() = default;
 
+    // gets weather data as json from the search term
     njson getWeatherData(const std::string& search);
 
 private:
@@ -22,7 +23,7 @@ private:
     // basic request for api returns full json which was requested
     njson apiRequest(const std::string& baseUrl, const std::string& searchUrl);
 
-    // returns coordinates latitude, longitude
+    // gets coordinates and city name from the search term
     std::pair<std::pair<float, float>, std::string> getCoordinates(const std::string& search);
 };
 

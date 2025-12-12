@@ -7,11 +7,11 @@
 
 MainTables::MainTables(QVBoxLayout* mainWindowLayout, QWidget* parent)
 {
-    tableview_ = new QTableView(parent);
-    tableview_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
     init24hTable();
     init7dTable();
+
+    tableview_ = new QTableView(parent);
+    tableview_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     tableview_->setModel(model24h_);
     mainWindowLayout->addWidget(tableview_);

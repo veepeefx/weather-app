@@ -17,7 +17,10 @@ public:
     MainTables(QVBoxLayout* mainWindowLayout, QWidget* parent = nullptr);
     ~MainTables();
 
+    // updates 24h and 7d tables fully according the given data
     void updateTable(const ForecastData* data);
+
+    // changes from 24h -> 7d table or vice versa
     void changeTable();
 
 private:

@@ -23,7 +23,7 @@ bool DataHandler::updateData(const std::string& search)
     OpenMeteoAPI meteoApi;
     const njson data = meteoApi.getWeatherData(search);
 
-    // don't make search if search term was not valid or api call has some problems
+    // don't make search if search term was not valid
     if (data.empty()) {
         return false;
     }
@@ -73,7 +73,6 @@ void DataHandler::saveData(const njson &data)
     }
 }
 
-// adds entry to history_ from latest to oldest
 void DataHandler::addHistoryEntry(const std::string &entry)
 {
     QString qEntry = QString::fromStdString(entry);
@@ -88,7 +87,6 @@ void DataHandler::saveCache()
 
     // saving history to cache
     for (const QString& city : history_) {
-        // saving max 5 seaches
         if (i >= 5) {
             break;
         }

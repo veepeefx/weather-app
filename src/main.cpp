@@ -16,8 +16,6 @@ int main(int argc, char *argv[]) {
     view.show();
 
     Controller controller(view, model);
-    // if user has history loads it back and loads latest search
-    controller.makeLatestSearch();
 
     return QApplication::exec();
 }

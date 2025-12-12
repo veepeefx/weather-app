@@ -19,7 +19,11 @@ public:
 
     ~MainWindow() override;
 
+    // changes all views UI components period from 24h -> 7d or vice versa
     void changePeriod();
+
+    // updates all views UI components from dataHandler_.getData() if searchSuccessful = true
+    // else only infos the user about the un successful search and doesn't update anything else
     void updateMainWindow(bool searchSuccessful);
 
     // getters
@@ -48,10 +52,9 @@ private:
     void initCurrentWeather();
     void updateCurrentWeather(const ForecastData *data);
 
+    // sets focus to window itself
     void showEvent(QShowEvent *event) override;
 
-private
-    slots:
 };
 
 

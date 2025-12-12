@@ -71,7 +71,7 @@ void MainCharts::init24hChart()
     tempSeries24h_ = new QLineSeries();
     rainSeries24h_ = new QBarSeries();
 
-    // base values
+    // base values used only when there is no data
     tempYAxis24h_ = new QValueAxis();
     tempYAxis24h_->setRange(-20, 20);
     rainYAxis24h_ = new QValueAxis();
@@ -112,7 +112,7 @@ void MainCharts::init7dChart()
     tempSeries7d_ = new QLineSeries();
     rainSeries7d_ = new QBarSeries();
 
-    // base values
+    // base values used only when there is no data
     tempYAxis7d_ = new QValueAxis();
     tempYAxis7d_->setRange(-20, 20);
     rainYAxis7d_ = new QValueAxis();
@@ -137,7 +137,7 @@ void MainCharts::update24hChart(const ForecastData* data)
     tempSeries24h_->clear();
     rainSeries24h_->clear();
 
-    QBarSet *rainSet = new QBarSet("Rain");
+    QBarSet *rainSet = new QBarSet("mm");
     QDateTime now = QDateTime::currentDateTime();
     QDateTime startHour(QDate(now.date()), QTime(now.time().hour(), 0, 0, 0));
 
@@ -151,6 +151,7 @@ void MainCharts::update24hChart(const ForecastData* data)
         *rainSet << data->rainHourly[hour + i];
     }
     rainSeries24h_->append(rainSet);
+    tempSeries24h_->setName("°C");
 }
 
 void MainCharts::update7dChart(const ForecastData *data)
@@ -158,7 +159,7 @@ void MainCharts::update7dChart(const ForecastData *data)
     tempSeries7d_->clear();
     rainSeries7d_->clear();
 
-    QBarSet *rainSet = new QBarSet("Rain");
+    QBarSet *rainSet = new QBarSet("mm");
     QDateTime now = QDateTime::currentDateTime();
 
     for (int i = 0; i < 7; ++i) {
@@ -168,11 +169,10 @@ void MainCharts::update7dChart(const ForecastData *data)
             tempSeries7d_->append(dt.toMSecsSinceEpoch(), data->tempHourly[i * 24 + j]);
         }
     }
-
     rainSeries7d_->append(rainSet);
+    tempSeries7d_->setName("°C");
 }
 
-// ranges y-axis so it is easy to read
 void MainCharts::setYAxisRange(const ForecastData* data)
 {
     int hour = QDateTime::currentDateTime().time().hour();

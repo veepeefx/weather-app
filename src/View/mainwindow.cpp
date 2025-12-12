@@ -21,7 +21,6 @@ MainWindow::MainWindow(DataHandler* model, QWidget *parent) : QMainWindow(parent
     QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates));
 
     initTopMenu();
-
     charts_ = new MainCharts(mainLayout_, this);
     tables_ = new MainTables(mainLayout_, this);
 
@@ -42,6 +41,7 @@ void MainWindow::changePeriod()
 
 void MainWindow::updateMainWindow(bool searchSuccessful)
 {
+    // if place was not found, alert the user
     if (!searchSuccessful) {
         cityLabel_->setText("[Search not found!]");
         return;
@@ -82,15 +82,14 @@ void MainWindow::initSearchMenu()
     mainLayout_->addLayout(searchLayout);
 }
 
-
 void MainWindow::initCurrentWeather()
 {
     cityLabel_ = new QLabel("[Search for results]");
     cityLabel_->setStyleSheet("font-size: 24px; font-weight: bold;");
 
-    currentTempLabel_ = new QLabel("");
+    currentTempLabel_ = new QLabel("- °C");
     currentTempLabel_->setStyleSheet("font-size: 24px;");
-    currentRainLabel_ = new QLabel("");
+    currentRainLabel_ = new QLabel("- mm");
     currentRainLabel_->setStyleSheet("font-size: 24px;");
 
     QHBoxLayout *infoLayout = new QHBoxLayout();
@@ -105,6 +104,7 @@ void MainWindow::initCurrentWeather()
 
 void MainWindow::updateCurrentWeather(const ForecastData* data)
 {
+    // updating history view and clearing search bar for next search
     searchBox_->clear();
     searchBox_->addItems(dataHandler_->getHistory());
     searchBox_->lineEdit()->setText("");
@@ -118,7 +118,6 @@ void MainWindow::updateCurrentWeather(const ForecastData* data)
         QString::number(data->currentRain, 'f', 1) + " mm");
 }
 
-// sets focus to window itself
 void MainWindow::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);

@@ -11,14 +11,19 @@ public:
     Controller(MainWindow &window, DataHandler &handler);
     ~Controller();
 
+    // searches the place which was done before closing the application
     void makeLatestSearch();
 
 private:
+
     MainWindow &mainWindow_;
     DataHandler &dataHandler_;
 
 private slots:
+
+    // uses user given search term from the UI and updates it if search was successful
     void makeSearch();
+
 };
 
 

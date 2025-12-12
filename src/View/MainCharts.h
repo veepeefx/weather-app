@@ -18,12 +18,14 @@ public:
     MainCharts(QVBoxLayout* mainWindowLayout, QWidget* parent = nullptr);
     ~MainCharts();
 
+    // updates 24h and 7d charts fully according the data given
     void updateChart(const ForecastData* data);
+
+    // changes from 24h -> 7d chart or vice versa
     void changeChart();
 
 private:
 
-    // chart items
     QChart *chart24h_{nullptr};
     QLineSeries *tempSeries24h_{nullptr};
     QBarSeries *rainSeries24h_{nullptr};
@@ -44,6 +46,7 @@ private:
     void update24hChart(const ForecastData* data);
     void update7dChart(const ForecastData* data);
 
+    // ranges y-axis for the data
     void setYAxisRange(const ForecastData* data);
 };
 
