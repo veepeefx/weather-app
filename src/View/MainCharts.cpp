@@ -77,6 +77,9 @@ void MainCharts::init24hChart()
     rainYAxis24h_ = new QValueAxis();
     rainYAxis24h_->setRange(0, 20);
 
+    tempYAxis24h_->setTitleText("Temperature (°C)");
+    rainYAxis24h_->setTitleText("Preciptation (mm)");
+
     chart24h_->addSeries(rainSeries24h_);
     chart24h_->addSeries(tempSeries24h_);
 
@@ -117,6 +120,9 @@ void MainCharts::init7dChart()
     tempYAxis7d_->setRange(-20, 20);
     rainYAxis7d_ = new QValueAxis();
     rainYAxis7d_->setRange(0, 20);
+
+    tempYAxis7d_->setTitleText("Temperature (°C)");
+    rainYAxis7d_->setTitleText("Preciptation (mm)");
 
     chart7d_->addSeries(rainSeries7d_);
     chart7d_->addSeries(tempSeries7d_);
