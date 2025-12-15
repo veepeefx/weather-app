@@ -43,7 +43,7 @@ All libraries are included in the project, so **no external installation is requ
 - [cpp-httplib](https://github.com/yhirose/cpp-httplib) – HTTP client (header-only, `include/httplib.h`)
 - [nlohmann/json](https://github.com/nlohmann/json) – JSON parser (header-only, `include/json.hpp`)
 - C++ 20 compatible compiler
-- **CMake ≥ 3.21** (required for Qt6 projects)
+- CMake 4.0 ->
 - Qt6 with the following required modules: 
   - Core
   - Gui
