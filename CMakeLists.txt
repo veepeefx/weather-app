@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 4.0)
-project(weatherApp)
+project(weather-app)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_AUTOMOC ON)
@@ -14,7 +14,7 @@ find_package(Qt6 REQUIRED COMPONENTS
         Charts)
 
 
-add_executable(weatherApp src/main.cpp
+add_executable(weather-app src/main.cpp
         src/View/mainwindow.cpp
         src/View/mainwindow.h
         src/Model/OpenMeteoAPI.cpp
@@ -29,7 +29,7 @@ add_executable(weatherApp src/main.cpp
         src/Model/DataHandler.h
         src/Model/ForecastData.h)
 
-target_link_libraries(weatherApp
+target_link_libraries(weather-app
         Qt::Core
         Qt::Gui
         Qt::Widgets
